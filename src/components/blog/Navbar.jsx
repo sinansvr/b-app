@@ -13,13 +13,25 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { useSelector } from 'react-redux';
+import { useNavigate } from "react-router-dom"
 
 const pages = ['Dashboard', 'New Blog', 'About'];
 // const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const menuItems = [
+  { label: "My Blogs", action: () => handleMyBlogs() },
+  { label: "Profile", action: () => handleProfile() },
+  { label: "Logout", action: () => handleLogout() }
+];
+
+const handleMyBlogs = () => { }
+const handleProfile = () => { }
+const handleLogout = () => { }
 
 function Navbar() {
+  const navigate = useNavigate()
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -35,8 +47,8 @@ function Navbar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-const {currentUser}=useSelector((state)=>state.auth)
-  // const user = false;
+  const { currentUser } = useSelector((state) => state.auth)
+  console.log(currentUser)
 
   return (
     <AppBar position="static">
@@ -153,16 +165,25 @@ const {currentUser}=useSelector((state)=>state.auth)
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {/* {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+              {currentUser ? (
+                menuItems.map((Item)=>(
+                  <MenuItem 
+                  key={Item.label}
+                  onClick={() => {
+                    Item.action()
+                    handleCloseUserMenu()
+                  }}>
+                    <Typography textAlign="center">{Item.label}</Typography>
+                  </MenuItem>
+                ))
+              )
+              
+                : <MenuItem onClick={() => {
+                  handleCloseUserMenu()
+                  navigate("/login")
+                }}>
+                  <Typography textAlign="center">Login</Typography>
                 </MenuItem>
-              ))} */}
-              {currentUser ? <MenuItem onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">Logout</Typography>
-              </MenuItem> : <MenuItem onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">Login</Typography>
-              </MenuItem>
 
               }
 
