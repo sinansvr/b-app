@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux"
-import { fetchFail, fetchStart, loginSuccess, registerSuccess } from "../features/authSlice"
+import { fetchFail, fetchStart, loginSuccess, logoutSuccess, registerSuccess } from "../features/authSlice"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import { notify } from "../helper/sweetAlert"
@@ -19,6 +19,7 @@ const useAuthCall = () => {
       dispatch(loginSuccess(data))
       navigate("/")
       notify("Successfully logged in!","success")
+      console.log(data)
 
     } catch (error) {
       dispatch(fetchFail())
@@ -31,8 +32,8 @@ const useAuthCall = () => {
     const BASE_URL = "http://34164.fullstack.clarusway.com"
 
     try {
-      const { data } = await axios.post(`${BASE_URL}/users/auth/logout/`, userData)
-      dispatch(loginSuccess(data))
+      await axios.post(`${BASE_URL}/account/auth/logout/`, userData)
+      dispatch(logoutSuccess())
       navigate("/")     
       notify("Successfully logged out!","success")
 
